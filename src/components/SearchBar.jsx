@@ -7,34 +7,35 @@ const SearchBar = () => {
   const [cache, setCache] = useState({});
 
   const fetchData = async () => {
-
-    if(cache[input]){
-        console.log('Returned from Cache', input);
-        setResults(cache[input]);
-        return;
+    if (cache[input]) {
+      console.log("Returned from Cache", input);
+      setResults(cache[input]);
+      return;
     }
 
-    const response = await fetch("https://dummyjson.com/recipes/search?q=" + input);
+    const response = await fetch(
+      "https://dummyjson.com/recipes/search?q=" + input
+    );
     const data = await response.json();
-    console.log('API Call', input);
+    console.log("API Call", input);
     setResults(data.recipes);
     // Updating the Cache with new input keys and values
-    setCache((prev) => ({...prev, [input] : data.recipes}))
+    setCache((prev) => ({ ...prev, [input]: data.recipes }));
   };
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
     setShowResults(true);
-  }
+  };
 
   useEffect(() => {
-    const timer = setTimeout(()=> {
-        fetchData()
-    }, 300)
+    const timer = setTimeout(() => {
+      fetchData();
+    }, 300);
 
     return () => {
-        clearTimeout(timer)
-    }
+      clearTimeout(timer);
+    };
   }, [input]);
 
   return (
@@ -49,13 +50,15 @@ const SearchBar = () => {
           onFocus={() => setShowResults(false)}
           onBlur={() => setShowResults(false)}
         />
-        {
-            showResults && <div className="results-container">
+        {showResults && (
+          <div className="results-container">
             {results.map((r) => (
-              <span className="result" key={r.id}>{r.name}</span>
+              <span className="result" key={r.id}>
+                {r.name}
+              </span>
             ))}
           </div>
-        }
+        )}
       </div>
     </div>
   );
